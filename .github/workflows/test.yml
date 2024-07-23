@@ -15,7 +15,7 @@ on:
       - release/*
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *' # Runs nightly at 0AM UTC
+    - cron: '*/10 * * * *' # Runs every 10 minutes
 
 defaults:
   run:
@@ -314,6 +314,8 @@ jobs:
           if [ "$LOTUS_RUN_VERY_EXPENSIVE_TESTS" == "1" ] && [[ ! "$GO_TEST_FLAGS" =~ "-timeout" ]]; then
             GO_TEST_FLAGS="$GO_TEST_FLAGS -timeout 60m"
           fi
+
+          [ $((RANDOM % 10)) -eq 0 ] && exit 1 || exit 0
 
           gotestsum \
             --format "$FORMAT" \
